@@ -6,7 +6,7 @@ Minimal standalone PySpark portability example for:
 - Singularity/Apptainer
 - HPC-style environments with remapped runtime UIDs
 
-This repo is intentionally small and comes with a longer writeup in [ARTICLE_DRAFT.md](https://github.com/ans9868/simplified-pyspark/blob/main/ARTICLE_DRAFT.md).
+This repo is intentionally small and comes with a longer writeup on Medium: [How You Can Make PySpark Work Across Docker, Singularity, and HPC](https://medium.com/@adelnsahuc/how-you-can-make-pyspark-work-across-docker-singularity-and-hpc-890f55970c51).
 
 ## Variants
 
@@ -116,4 +116,4 @@ export APPTAINER_TMPDIR=${SLURM_TMPDIR:-/tmp/$USER-apptainer}
 export TMPDIR=$APPTAINER_TMPDIR
 ```
 
-For the full debugging story, exact failure messages, and the rationale behind `baseline` vs `fixed`, see [ARTICLE_DRAFT.md](https://github.com/ans9868/simplified-pyspark/blob/main/ARTICLE_DRAFT.md).
+For the full debugging story, exact failure messages, and the rationale behind `baseline` vs `fixed`, see the Medium article: [How You Can Make PySpark Work Across Docker, Singularity, and HPC](https://medium.com/@adelnsahuc/how-you-can-make-pyspark-work-across-docker-singularity-and-hpc-890f55970c51).
