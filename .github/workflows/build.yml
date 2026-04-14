@@ -1,0 +1,62 @@
+name: Build and Push Simplified PySpark Images
+
+on:
+  push:
+    branches: ["*"]
+    paths:
+      - "**"
+      - ".github/workflows/build.yml"
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - variant: baseline
+            dockerfile: baseline/Dockerfile
+            image: nour333/simplified-pyspark-baseline
+            version_tag: 0.0.1
+          - variant: fixed
+            dockerfile: fixed/Dockerfile
+            image: nour333/simplified-pyspark-fixed
+            version_tag: 0.0.1
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Free disk space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          docker-images: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          swap-storage: false
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push ${{ matrix.variant }}
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            ${{ matrix.image }}:${{ matrix.version_tag }}
+            ${{ matrix.image }}:latest
+          cache-from: type=gha,scope=${{ matrix.variant }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.variant }}
